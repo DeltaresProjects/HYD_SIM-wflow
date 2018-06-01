@@ -1198,7 +1198,7 @@ def main():
     dw_CreateDwRun(dwdir)
 
 
-    config = ConfigParser.SafeConfigParser()
+    config = ConfigParser.ConfigParser()
     config.optionxform = str
     config.read(caseId + "/" + configfile)
     

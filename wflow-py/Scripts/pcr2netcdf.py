@@ -219,7 +219,7 @@ def getnetcdfmetafromini(inifile):
     """
     metadata = {}
 
-    config = configparser.SafeConfigParser()
+    config = configparser.ConfigParser()
     config.optionxform = str
     if os.path.exists(inifile):
         config.read(inifile)
@@ -241,7 +241,7 @@ def getvarmetadatafromini(inifile,var):
     """
     metadata = {}
 
-    config = configparser.SafeConfigParser()
+    config = configparser.ConfigParser()
     config.optionxform = str
     if os.path.exists(inifile):
         config.read(inifile)
