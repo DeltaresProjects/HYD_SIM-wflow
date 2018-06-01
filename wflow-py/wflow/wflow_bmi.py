@@ -155,8 +155,8 @@ class wflowbmi_light(object):
 
         self.name, useddef = configget(self.config,'model','modeltype',os.path.splitext(os.path.basename(configfile))[0])
         if useddef:
-            self.bmilogger.warn("Please specify modeltype in the model section of file: " + configfile)
-            self.bmilogger.warn("Assuming " + self.name + " as model type.")
+            self.bmilogger.warning("Please specify modeltype in the model section of file: " + configfile)
+            self.bmilogger.warning("Assuming " + self.name + " as model type.")
 
         maxNrSteps = 10000
         maxNrSteps = 0
@@ -517,7 +517,7 @@ class wflowbmi_csdms(bmi.Bmi):
         self.bmilogger = setlogger('wflow_bmi.log','wflow_bmi_logging',thelevel=self.loggingmode)
         self.bmilogger.info("__init__: wflow_bmi object initialised.")
         if self.wrtodisk:
-            self.bmilogger.warn('Will write all bmi set and get grids to disk!...')
+            self.bmilogger.warning('Will write all bmi set and get grids to disk!...')
 
 
     def initialize_config(self, filename, loglevel=logging.DEBUG):
@@ -547,8 +547,8 @@ class wflowbmi_csdms(bmi.Bmi):
 
         self.name, useddef = configget(self.config,'model','modeltype',os.path.splitext(os.path.basename(filename))[0])
         if useddef:
-            self.bmilogger.warn("Please specify modeltype in the model section of file: " + fullpathname)
-            self.bmilogger.warn("Assuming " + self.name + " as model type.")
+            self.bmilogger.warning("Please specify modeltype in the model section of file: " + fullpathname)
+            self.bmilogger.warning("Assuming " + self.name + " as model type.")
 
         try:
             exec("import wflow." + self.name + " as wf")
@@ -686,7 +686,7 @@ class wflowbmi_csdms(bmi.Bmi):
         if len(attrpath) == 2:
             self.dynModel._userModel().config.set(attrpath[0],attrpath[1],attribute_value)
         else:
-            self.bmilogger.warn("Attributes should follow the name:option  convention")
+            self.bmilogger.warning("Attributes should follow the name:option  convention")
             raise Warning("attributes should follow the name:option  convention")
 
 

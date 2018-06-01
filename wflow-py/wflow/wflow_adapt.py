@@ -599,7 +599,7 @@ def main():
                 shutil.copy(workdir + "/" + case +"/instate/WSO.map",workdir +  "/" + case +"/" +runId + "/outmaps/WSO00000.000")
                 shutil.copy(workdir + "/" + case +"/instate/LAI.map",workdir +  "/" + case +"/" +runId + "/outmaps/LAI00000.000")
             except:
-                logger.warn("Cannot copy Surfacerunoff and/or level")
+                logger.warning("Cannot copy Surfacerunoff and/or level")
 
         # Step 3:
         # now check for tss files in the ini file and convert to XML

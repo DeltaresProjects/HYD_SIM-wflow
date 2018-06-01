@@ -81,7 +81,7 @@ class wflowbmi_csdms(bmi.Bmi):
         self.bmilogger = setlogger('wflow_bmi_combined.log','wflow_bmi_combined_logging',thelevel=self.loggingmode)
         self.bmilogger.info("__init__: wflow_bmi_combined object initialised.")
         if self.wrtodisk:
-            self.bmilogger.warn('Will write all bmi set- and get- grids to disk!...')
+            self.bmilogger.warning('Will write all bmi set- and get- grids to disk!...')
 
 
 

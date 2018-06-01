@@ -307,7 +307,7 @@ class netcdfoutput():
         """
         if hasattr(self, "nc_trg"):
             if self.bufferdirty:
-                self.logger.warn("Finishing before expected run-length exceeded. Buffer not flushed")
+                self.logger.warning("Finishing before expected run-length exceeded. Buffer not flushed")
             self.nc_trg.sync()
             self.nc_trg.close()
 
@@ -533,7 +533,7 @@ class netcdfinput():
                 self.alldat[var] = reshape(self.dataset.variables[var],(self.maxlentime,len(y),len(x)))
             except:
                 self.alldat.pop(var, None)
-                logging.warn("Variable " + var + " not found in netcdf file: " + netcdffile)
+                logging.warning("Variable " + var + " not found in netcdf file: " + netcdffile)
 
 
 
@@ -563,14 +563,14 @@ class netcdfinput():
 
         if tsdatetime != None:
             if tsdatetime.replace(tzinfo=None) != self.datetimelist[ncindex].replace(tzinfo=None):
-                logging.warn("Date/time does not match. Wanted " + str(tsdatetime) + " got " + str(self.datetimelist[ncindex]))
+                logging.warning("Date/time does not match. Wanted " + str(tsdatetime) + " got " + str(self.datetimelist[ncindex]))
                 import bisect
                 pos = bisect.bisect_left(self.datetimelist,tsdatetime.replace(tzinfo=None))
                 if pos >= self.datetimelist.size:
                     pos = self.datetimelist.size -1
-                    logging.warn("No matching date/time found using last date/time again...")
+                    logging.warning("No matching date/time found using last date/time again...")
                 self.offset = pos - ncindex
-                logging.warn("Adjusting to the date/time at index and setting offset: " + str(pos) + ":" + str(self.offset) + ":"  + str(self.datetimelist[pos]))
+                logging.warning("Adjusting to the date/time at index and setting offset: " + str(pos) + ":" + str(self.offset) + ":"  + str(self.datetimelist[pos]))
                 ncindex = pos
 
 
@@ -692,7 +692,7 @@ class netcdfinputstates():
                 self.alldat[var] = self.dataset.variables[var][self.fstep:self.maxsteps]
             except:
                 self.alldat.pop(var, None)
-                logging.warn("Variable " + var + " not found in netcdf file: " + netcdffile)
+                logging.warning("Variable " + var + " not found in netcdf file: " + netcdffile)
 
     def gettimestep(self, timestep, logging, var='P', tsdatetime=None):
         """
@@ -707,7 +707,7 @@ class netcdfinputstates():
         if var in self.dataset.variables:
             if tsdatetime != None:
                 if tsdatetime.replace(tzinfo=None) != self.datetimelist[ncindex].replace(tzinfo=None):
-                    logging.warn("Date/time of state (" + var + " in " + self.fname + ")does not match. Wanted " + str(tsdatetime) + " got " + str(self.datetimelist[ncindex]))
+                    logging.warning("Date/time of state (" + var + " in " + self.fname + ")does not match. Wanted " + str(tsdatetime) + " got " + str(self.datetimelist[ncindex]))
 
             np_step = self.dataset.variables[var][ncindex, self.latidx.min():self.latidx.max() + 1,
                           self.lonidx.min():self.lonidx.max() + 1]
