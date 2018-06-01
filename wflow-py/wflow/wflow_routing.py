@@ -69,7 +69,7 @@ import getopt
 from wflow.wf_DynamicFramework import *
 from wflow.wflow_funcs import *
 from wflow.wflow_adapt import *
-import ConfigParser
+import configparser
 
 
 wflow = "wflow_routing: "
@@ -78,8 +78,8 @@ updateCols = []
 
 def usage(*args):
     sys.stdout = sys.stderr
-    for msg in args: print msg
-    print __doc__
+    for msg in args: print(msg)
+    print(__doc__)
     sys.exit(0)
 
 
@@ -732,7 +732,7 @@ def main(argv=None):
     ########################################################################
     try:
         opts, args = getopt.getopt(argv, 'F:L:hC:Ii:v:S:T:WR:u:s:EP:p:Xx:U:fOc:l:g:')
-    except getopt.error, msg:
+    except getopt.error as msg:
         pcrut.usage(msg)
 
     for o, a in opts:
@@ -743,15 +743,15 @@ def main(argv=None):
         if o == '-s': timestepsecs = int(a)
         if o == '-h': usage()
         if o == '-f': _NoOverWrite = 0
-        if o == '-l': exec "loglevel = logging." + a
+        if o == '-l': exec("loglevel = logging." + a)
 
 
 
-    starttime = dt.datetime(1990,01,01)
+    starttime = dt.datetime(1990,0o1,0o1)
 
     if _lastTimeStep < _firstTimeStep:
-        print "The starttimestep (" + str(_firstTimeStep) + ") is smaller than the last timestep (" + str(
-            _lastTimeStep) + ")"
+        print("The starttimestep (" + str(_firstTimeStep) + ") is smaller than the last timestep (" + str(
+            _lastTimeStep) + ")")
         usage()
 
     myModel = WflowModel(wflow_cloneMap, caseName, runId, configfile)
@@ -771,7 +771,7 @@ def main(argv=None):
             configset(myModel.config, 'model', 'updateFile', a, overwrite=True)
             configset(myModel.config, 'model', 'updating', "1", overwrite=True)
         if o == '-u':
-            exec "zz =" + a
+            exec("zz =" + a)
             updateCols = zz
         if o == '-P':
             left = a.split('=')[0]

@@ -49,8 +49,8 @@ from wflow.wflow_adapt import *
 
 def usage(*args):
     sys.stdout = sys.stderr
-    for msg in args: print msg
-    print __doc__
+    for msg in args: print(msg)
+    print(__doc__)
     sys.exit(0)
 
 
@@ -783,11 +783,11 @@ def main(argv=None):
         if o == '-c': configfile = a
         if o == '-s': timestepsecs = int(a)
         
-        starttime = dt.datetime(1990,01,01)
+        starttime = dt.datetime(1990,0o1,0o1)
 
     if _lastTimeStep < _firstTimeStep:
-        print "The starttimestep (" + str(_firstTimeStep) + ") is smaller than the last timestep (" + str(
-            _lastTimeStep) + ")"
+        print("The starttimestep (" + str(_firstTimeStep) + ") is smaller than the last timestep (" + str(
+            _lastTimeStep) + ")")
         usage()
 
     myModel = WflowModel(wflow_cloneMap, caseName,runId,configfile)

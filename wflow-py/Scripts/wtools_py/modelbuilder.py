@@ -312,7 +312,7 @@ def post_data(url, data):
         r.raise_for_status()
     except requests.exceptions.HTTPError as err:
         print(err)
-        print(r.text)
+        print((r.text))
         sys.exit(1)
     return r
 
@@ -324,7 +324,7 @@ def get_data(url):
         r.raise_for_status()
     except requests.exceptions.HTTPError as err:
         print(err)
-        print(r.text)
+        print((r.text))
         sys.exit(1)
     return r
 

@@ -116,12 +116,12 @@ class Interpol_Obj(object):
         self.filename = self.name + ".tmp"        
         
         temptablefile = open(self.filename, 'w')
-        index = range(0, len(self.data)-1)
+        index = list(range(0, len(self.data)-1))
         for i in index:
             if i < (len(self.data)-1):
                 if i >= i + 1:
-                    print "x values of lookuplinear table not sorted in strictly ascending order..."
-            if i//2. - i/2. <> 0.:
+                    print("x values of lookuplinear table not sorted in strictly ascending order...")
+            if i//2. - i/2. != 0.:
                 string = str(self.data[i]) + " "
             else: 
                 string = '\n' + str(self.data[i]) + " " 
@@ -151,8 +151,8 @@ def supplyCurrentTime(self):
 
 def usage(*args):
     sys.stdout = sys.stderr
-    for msg in args: print msg
-    print __doc__
+    for msg in args: print(msg)
+    print(__doc__)
     sys.exit(0)
 
 
@@ -381,7 +381,7 @@ class WflowModel(DynamicModel):
         if self.reinit == 1:
             self.logger.info("Setting initial conditions to default")
             for s in self.stateVariables():
-                exec "self." + s + " = cover(0.0)"
+                exec("self." + s + " = cover(0.0)")
         else:
             self.wf_resume(self.Dir + "/instate/")
 
@@ -454,12 +454,12 @@ class WflowModel(DynamicModel):
         
             if self.HarvestDAP > 0:
                 HarvNow             = DOY >=  (self.CropStartDOY + self.HarvestDAP)
-                print "Warning: harvest date read from ini file, not from Crop Profile map..."
+                print("Warning: harvest date read from ini file, not from Crop Profile map...")
             elif  self.HarvestDAP == 0:
                 HarvNow            = Not_Finished == False
-                print "Harvest date not specified; crop harvest at crop maturity"
+                print("Harvest date not specified; crop harvest at crop maturity")
             else: 
-                print "Crop harvest not initialized, found strange values in ini file... CTRL + C to exit..."
+                print("Crop harvest not initialized, found strange values in ini file... CTRL + C to exit...")
                 time.sleep(100)
             CropHarvNow            = HarvNow & self.ricemask_BOOL    
             
@@ -471,7 +471,7 @@ class WflowModel(DynamicModel):
             Started            = self.STARTED > 0
             CropStarted        = Started & self.ricemask_BOOL
             self.STARTED       = (self.STARTED + CropStartNow_scalar + scalar(CropStarted)) * ifthenelse(CropHarvNow, scalar(0.), 1.) 
-            print "Warning: using start date from ini file, not read from Crop Profile..."
+            print("Warning: using start date from ini file, not read from Crop Profile...")
                 
         elif self.CropStartDOY == -1:
         
@@ -483,7 +483,7 @@ class WflowModel(DynamicModel):
                 elif self.HarvestDAP > 0:
                     HarvNow            = self.STARTED == self.HarvestDAP
                     CropHarvNow        = HarvNow & self.ricemask_BOOL
-                print "Start date read from Crop Profile..."
+                print("Start date read from Crop Profile...")
               # Two auxilliary variables:
                 CRPST_gt_0       = self.CRPST > 0.
                 CRPST_eq_STARTED = self.CRPST == self.STARTED
@@ -532,14 +532,14 @@ class WflowModel(DynamicModel):
                     PrepareField         = ifthenelse(FirstorSecondSeason, PrepareField_temp, 0.)
                     self.STARTED         = (self.STARTED + CropStartNow_scalar + scalar(CropStarted)) * ifthenelse(CropHarvNow, scalar(0.), 1.) - ifthenelse(HarvSeasonOneTwo, PrepareField, 0.) + Season12Harvd_Scalar
                 else: 
-                    print self.Sim3rdSeason
+                    print(self.Sim3rdSeason)
                     time.sleep(10)
                     
             else:
-                print "Strange value of variable AutoStartStop found... ctrl + c to exit..."
+                print("Strange value of variable AutoStartStop found... ctrl + c to exit...")
                 time.sleep(100)
         else:
-            print "Strange (negative?) value of variable CropStartDOY found... ctrl + c to exit..."
+            print("Strange (negative?) value of variable CropStartDOY found... ctrl + c to exit...")
             time.sleep(100)
         
         if self.WATERLIMITED == "True":
@@ -547,7 +547,7 @@ class WflowModel(DynamicModel):
             WAWP              = WCWP * self.ROOTD_mm 
             Enough_water      = ifthenelse(CropStartNow, True, self.WA > WAWP) # timestep delay...! todo 
         else:
-            print "Warning, run without water effects on crop growth..."
+            print("Warning, run without water effects on crop growth...")
             TRANRF        = scalar(1.)
             Enough_water      = True
             
@@ -756,7 +756,7 @@ x
     ########################################################################
     try:
         opts, args = getopt.getopt(argv, 'F:C:S:T:c:s:R:l')
-    except getopt.error, msg:
+    except getopt.error as msg:
         pcrut.usage(msg)
 
     for o, a in opts:
@@ -767,7 +767,7 @@ x
         if o == '-T': _lastTimeStep = int(a)
         if o == '-S': _firstTimeStep = int(a)
         if o == '-f': _NoOverWrite = 0
-        if o == '-l': exec "loglevel = logging." + a
+        if o == '-l': exec("loglevel = logging." + a)
 
     if (len(opts) <= 1):
         usage()

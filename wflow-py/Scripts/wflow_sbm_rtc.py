@@ -20,7 +20,7 @@ import wflow.wflow_adapt as adapter
 import datetime, calendar
 import os
 import numpy as np
-import ConfigParser
+import configparser
 
 #reload(bmi)
 
@@ -41,7 +41,7 @@ def ConfigSectionMap(section):
             if dict1[option] == -1:
                 DebugPrint("skip: %s" % option)
         except:
-            print("exception on %s!" % option)
+            print(("exception on %s!" % option))
             dict1[option] = None
     return dict1
 
@@ -70,13 +70,13 @@ argv = sys.argv
 
 try:
    opts, args = getopt.getopt(argv[1:], 'c:w:I:')
-   print opts
-except getopt.error, msg:
-   print 'cannot parse commandline'
+   print(opts)
+except getopt.error as msg:
+   print('cannot parse commandline')
    sys.exit(2)
 
 if not opts:
-    print 'cannot parse commandline'
+    print('cannot parse commandline')
     sys.exit(2)
 
 for o, a in opts:
@@ -84,7 +84,7 @@ for o, a in opts:
    if o == '-w' : cur_dir = os.path.abspath(a)
    if o == '-I' : IniFile = a
 
-Config = ConfigParser.ConfigParser()
+Config = configparser.ConfigParser()
 #inifile = Config.read('c:\FEWS\SI-WAMI\SI-WAMI\Modules\RTC\wflow_rtctools.ini')
 inifile = Config.read(configfile)
 ########################################################################
@@ -123,7 +123,7 @@ os.chdir(Bin_RTC)
 from wflow.wrappers.rtc.wrapperExtended import BMIWrapperExtended
 #RTC_model = BMIWrapperExtended(engine=os.path.join(Bin_RTC,"RTCTools_BMI"))
 RTC_model = BMIWrapperExtended(engine=os.path.join(Bin_RTC,"RTCTools_BMI"))
-print 'RTCmodel', Bin_RTC,RTC_model
+print('RTCmodel', Bin_RTC,RTC_model)
 RTC_model.initialize('..')
 
 
@@ -144,35 +144,35 @@ inputmstacks =  list(set(invars) - set(outvars))
 
 # In[]: Investigate start time, end time and time step of both models
 
-print 'WFlow:'
+print('WFlow:')
 LA_dt = LA_model.get_time_step()
 
 #LA_start = LA_model.get_start_time()
 timeutc = adapter.getStartTimefromRuninfo('inmaps/runinfo.xml')
-print timeutc
+print(timeutc)
 LA_start = calendar.timegm(timeutc.timetuple())
 timeutc = adapter.getEndTimefromRuninfo('inmaps/runinfo.xml')
 LA_end = calendar.timegm(timeutc.timetuple())
 #LA_end = LA_model.get_end_time()
-print LA_dt
-print timeutc
-print LA_start
-print LA_end
+print(LA_dt)
+print(timeutc)
+print(LA_start)
+print(LA_end)
 
-print 'RTC-Tools'
+print('RTC-Tools')
 RTC_dt = RTC_model.get_time_step()
 RTC_start = RTC_model.get_start_time()
 RTC_end = RTC_model.get_end_time()
 
-print RTC_dt
-print RTC_start
-print RTC_end
+print(RTC_dt)
+print(RTC_start)
+print(RTC_end)
 
 if LA_start != RTC_start:
-    print 'Error: start time of both models is not identical !!!'
+    print('Error: start time of both models is not identical !!!')
 
 if LA_dt != RTC_dt:
-    print 'Error: time step of both models is not identical !!!'
+    print('Error: time step of both models is not identical !!!')
 
 
 # In[]:  Read and map reservoir inflow and outflow locations
@@ -202,7 +202,7 @@ while t < min(LA_end, RTC_end):
         inmstackbuf[thisstack] = flipud(pcr2numpy(scalar(pcraster.readmap(os.path.abspath(toread))),-999.0)).copy()
         LA_model.set_value(thisstack,inmstackbuf[thisstack])
 
-    print "calculation timestep = " + str(timecounter)
+    print("calculation timestep = " + str(timecounter))
 
     # Get the inflow from the wflow model runoff map and map
     inflowQ = flipud(LA_model.get_value("SurfaceRunoff")).copy()
@@ -212,7 +212,7 @@ while t < min(LA_end, RTC_end):
         value = np.ndarray(shape=(1,1), dtype=float, order='F')
         value[0][0] = np.sum(inflowQ[np.where(Reservoir_inflow==int(wflow_id))])
         rtc_id = id_in_rtc[id_in_wflow.index(str(wflow_id))]
-        print rtc_id + ' = ' + str(value[0][0])
+        print(rtc_id + ' = ' + str(value[0][0]))
         RTC_model.set_value(rtc_id, value)
 
     # run the RTC-Tools model

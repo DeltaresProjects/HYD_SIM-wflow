@@ -62,7 +62,7 @@ import re
 from glob import *
 import logging
 import logging.handlers
-import ConfigParser
+import configparser
 import numpy
 
 import wflow.wflow_lib as wflow_lib
@@ -128,7 +128,7 @@ def setlogger(logfilename,loggername,thelevel=logging.INFO):
         logger.debug("File logging to " + logfilename)
         return logger
     except IOError:
-        print "ERROR: Failed to initialize logger with logfile: " + logfilename
+        print("ERROR: Failed to initialize logger with logfile: " + logfilename)
         sys.exit(2)
 
 
@@ -187,7 +187,7 @@ def pixml_state_updateTime(inxml,outxml,DT):
                     fo.write(aline)
 
     else:
-        print(inxml + " does not exists.")
+        print((inxml + " does not exists."))
         
 
         
@@ -226,7 +226,7 @@ def pixml_totss_dates (nname,outputdir):
                     ff.write(str(i) +'\t' + dt.strftime('%H\n'))
                     i += 1
     else:
-        print(nname + " does not exists.")
+        print((nname + " does not exists."))
     
 
 def pixml_totss(nname,outputdir):
@@ -279,7 +279,7 @@ def pixml_totss(nname,outputdir):
             i = 0
             for ev in events:
                 parlocs[par] = 1
-                if val.has_key((i,par)):
+                if (i,par) in val:
                     theval = val[i,par] + '\t' + ev.attrib['value']
                     val[i,par] = theval
                     parlocs[par] = parlocs[par] + 1            
@@ -301,7 +301,7 @@ def pixml_totss(nname,outputdir):
                     f.write(str(i+1) + '\t' + val[i,par] + '\n')
                         
     else:
-        print(nname + " does not exists.")
+        print((nname + " does not exists."))
 
 
 
@@ -435,7 +435,7 @@ def getTimeStepsfromRuninfo(xmlfile,timestepsecs):
         else:
             return diff.days  + 1# Should actually be + 1 but fews starts at 0!
     else:
-        print(xmlfile + " does not exists.")
+        print((xmlfile + " does not exists."))
 
 
 
@@ -450,7 +450,7 @@ def getEndTimefromRuninfo(xmlfile):
         edate=runinf.find('.//{' + fewsNamespace + '}endDateTime')
         ed = datetime.strptime(edate.attrib['date'] + edate.attrib['time'],'%Y-%m-%d%H:%M:%S')
     else:
-        print(xmlfile + " does not exists.")
+        print((xmlfile + " does not exists."))
         ed = None
         
     return ed
@@ -487,7 +487,7 @@ def getMapStacksFromRuninfo(xmlfile):
         edate=runinf.find('.//{' + fewsNamespace + '}startDateTime')
         ed = datetime.strptime(edate.attrib['date'] + edate.attrib['time'],'%Y-%m-%d%H:%M:%S')
     else:
-        print(xmlfile + " does not exists.")
+        print((xmlfile + " does not exists."))
         
     return ed
 
@@ -520,9 +520,9 @@ def main():
 
     try:
         opts, _ = getopt.getopt(sys.argv[1:], "-M:-t:-s:-o:-r:-w:-C:-I:R:")
-    except getopt.GetoptError, err:
+    except getopt.GetoptError as err:
         # print help information and exit:
-        print str(err) 
+        print(str(err)) 
         usage()
         sys.exit(2)
 
@@ -559,7 +559,7 @@ def main():
             assert False, "unhandled option"
 
     # Try and read config file and set default options
-    config = ConfigParser.SafeConfigParser()
+    config = configparser.SafeConfigParser()
     config.optionxform = str
     config.read(workdir + "/" + case + "/" + iniFile)
     

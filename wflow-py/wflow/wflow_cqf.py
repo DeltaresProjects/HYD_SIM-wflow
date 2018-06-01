@@ -107,7 +107,7 @@ from wflow.wflow_funcs import *
 from wflow.wflow_adapt import *
 
 import scipy
-import ConfigParser
+import configparser
 
 
 wflow = "wflow_cqf: "
@@ -121,8 +121,8 @@ multpars = {}
 multdynapars = {}
 def usage(*args):
     sys.stdout = sys.stderr
-    for msg in args: print msg
-    print __doc__
+    for msg in args: print(msg)
+    print(__doc__)
     sys.exit(0)
 
 
@@ -448,10 +448,10 @@ class WflowModel(DynamicModel):
 
    
     # Multiply parameters with a factor (for calibration etc) -P option in command line
-    for k, v in multpars.iteritems():
+    for k, v in multpars.items():
         estr = k + "=" + k + "*" + str(v)
         self.logger.info("Parameter multiplication: " +  estr)
-        exec estr
+        exec(estr)
     
     self.N=ifthenelse(self.River, self.NRiver, self.N)
     
@@ -720,10 +720,10 @@ class WflowModel(DynamicModel):
     self.WindSpeed=cover(self.wf_readmap(self.WindSpeed_mapstack,0.0),0)
     self.WaterCatch=cover(self.wf_readmap(self.WaterCatch_mapstack,0.0),0)
     
-    for k, v in multdynapars.iteritems():
+    for k, v in multdynapars.items():
         estr = k + "=" + k + "*" + str(v)
         self.logger.debug("Dynamic Parameter multiplication: " +  estr)
-        exec estr  
+        exec(estr)  
 
 
     #PotEvap = self.PotenEvap #
@@ -1148,7 +1148,7 @@ def main():
     ########################################################################
     try:
         opts, args = getopt.getopt(sys.argv[1:], 'XF:L:hC:Ii:v:S:T:WNR:u:s:EP:p:Xx:U:fOc:')
-    except getopt.error, msg:
+    except getopt.error as msg:
         pcrut.usage(msg)
     
 
@@ -1156,7 +1156,7 @@ def main():
         if o == '-P':
             exec ("multpars =" + a,globals(), globals())
         if o == '-p': 
-            exec "multdynapars =" + a
+            exec("multdynapars =" + a)
             exec ("multdynapars =" + a,globals(), globals())
         if o == '-C': caseName = a
         if o == '-R': runId = a
@@ -1192,8 +1192,8 @@ def main():
             configset(myModel.config,'model','updateFile',a,overwrite=True)
             configset(myModel.config,'model','updating',"1",overwrite=True)
         if o == '-u': 
-            print a
-            exec "updateCols =" +  a
+            print(a)
+            exec("updateCols =" +  a)
         if o == '-E': configset(myModel.config,'model','reInfilt','1',overwrite=True) 
         if o == '-R': runId = a
         if o == '-W': configset(myModel.config,'model','waterdem','1',overwrite=True) 

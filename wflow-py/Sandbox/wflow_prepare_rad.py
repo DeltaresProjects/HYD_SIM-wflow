@@ -229,8 +229,8 @@ def GenRadMaps(SaveDir,Lat,Lon,Slope,Aspect,Altitude,DegreeDem,logje,start=1,end
 
 def usage(*args):
     sys.stdout = sys.stderr
-    for msg in args: print msg
-    print __doc__
+    for msg in args: print(msg)
+    print(__doc__)
     sys.exit(0)
 
 
@@ -248,7 +248,7 @@ def main(argv=None):
 
     try:
         opts, args = getopt.getopt(argv, 'hD:Mx:y:l:O:S:E:T:s:e:')
-    except getopt.error, msg:
+    except getopt.error as msg:
         usage(msg)
 
 
@@ -274,7 +274,7 @@ def main(argv=None):
         if o == '-S': startday = int(a)
         if o == '-E': endday = int(a)
         if o == '-T': calc_interval = int(a)
-        if o == '-l': exec "thelevel = logging." + a
+        if o == '-l': exec("thelevel = logging." + a)
         if o == '-s': shour = int(a)
         if o == '-e': ehour = int(a)
 

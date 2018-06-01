@@ -86,7 +86,7 @@ import getopt
 import time
 import struct
 import shutil
-import __builtin__
+import builtins
 
 from wflow import wf_netcdfio
 
@@ -103,8 +103,8 @@ def dw_WriteNrSegments(fname,nr):
     B3\_nrofseg.inc
     """
     exfile = open(fname,'w')
-    print >>exfile,";Written by dw_WriteNrSegments"
-    print >>exfile,str(nr) + " ; nr of segments"
+    print(";Written by dw_WriteNrSegments", file=exfile)
+    print(str(nr) + " ; nr of segments", file=exfile)
     exfile.close()
 
 
@@ -115,8 +115,8 @@ def dw_WriteNrExChnages(fname,nr):
     B4\_nrofexch.inc
     """
     exfile = open(fname,'w')
-    print >>exfile,";Written by dw_WriteNrExChnages"
-    print >>exfile,str(nr) + " 0 0 ; x, y, z direction"
+    print(";Written by dw_WriteNrExChnages", file=exfile)
+    print(str(nr) + " 0 0 ; x, y, z direction", file=exfile)
     exfile.close()
 
 
@@ -127,13 +127,13 @@ def dw_WriteBoundData(fname,areas):
     
     areas = sorted(areas,reverse=True)
     exfile = open(fname,'w')
-    print >>exfile,";Written by dw_WriteBoundData"
+    print(";Written by dw_WriteBoundData", file=exfile)
     for i in areas:
-        print >>exfile, "ITEM \'Area_%s\'" %  (i)
-        print >>exfile, "CONCENTRATION  \'Area_%s\' \'Check\' \'Initial\'" %  (i)
-        print >>exfile, "DATA"
-        print >>exfile, "1.0  1.0  0.0"
-        print >>exfile, ""
+        print("ITEM \'Area_%s\'" %  (i), file=exfile)
+        print("CONCENTRATION  \'Area_%s\' \'Check\' \'Initial\'" %  (i), file=exfile)
+        print("DATA", file=exfile)
+        print("1.0  1.0  0.0", file=exfile)
+        print("", file=exfile)
  
     exfile.close()
 
@@ -145,18 +145,18 @@ def dw_WriteInitials(fname,inmaps):
     
     maps = ['Initial','Check']
     exfile = open(fname,'w')
-    print >>exfile,"INITIALS"
+    print("INITIALS", file=exfile)
     for rr in inmaps:
-        print >>exfile,"'" + rr + "'", 
+        print("'" + rr + "'", end=' ', file=exfile) 
     for rr in maps:
-        print >>exfile,"'" + rr + "'",        
-    print >>exfile
-    print >>exfile,"DEFAULTS"
+        print("'" + rr + "'", end=' ', file=exfile)        
+    print(file=exfile)
+    print("DEFAULTS", file=exfile)
     for rr in inmaps:
-        print >>exfile,str(0.0) + " ",
+        print(str(0.0) + " ", end=' ', file=exfile)
     for rr in maps:
-        print >>exfile,str(1.0) + " ",
-    print >>exfile    
+        print(str(1.0) + " ", end=' ', file=exfile)
+    print(file=exfile)    
     exfile.close()
     
     
@@ -175,8 +175,8 @@ def dw_WriteBoundlist(fname,pointer,areas,inflowtypes):
     """
     totareas = areas
     exfile = open(fname,'w')
-    print >>exfile,";Written by dw_WriteBoundlist"
-    print >>exfile,";'NodeID' 'Number' 'Type'"
+    print(";Written by dw_WriteBoundlist", file=exfile)
+    print(";'NodeID' 'Number' 'Type'", file=exfile)
     nr_inflowtypes = len(inflowtypes)
     
     #for i in range(nr_inflowtypes-1):
@@ -186,11 +186,11 @@ def dw_WriteBoundlist(fname,pointer,areas,inflowtypes):
     arid = 0
     for i in range(len(pointer)):
         if pointer[i,1] < 0:
-            print >>exfile,"'BD_" + str(absolute(pointer[i,1])) +  "'  '" + str(absolute(pointer[i,1])) + "'" + " 'Outflow'"
+            print("'BD_" + str(absolute(pointer[i,1])) +  "'  '" + str(absolute(pointer[i,1])) + "'" + " 'Outflow'", file=exfile)
         elif   pointer[i,0] < 0:
             #ar = int(absolute(totareas[arid]))
             ar = totareas[arid]
-            print >>exfile,"'BD_" +str(absolute(pointer[i,0])) + "' " + "'" + str(absolute(pointer[i,0])) + "'" + " 'Area_" + str(ar) + "'"
+            print("'BD_" +str(absolute(pointer[i,0])) + "' " + "'" + str(absolute(pointer[i,0])) + "'" + " 'Area_" + str(ar) + "'", file=exfile)
             arid = arid + 1
                 
     exfile.close()    
@@ -204,8 +204,8 @@ def dw_WritePointer(fname,pointer,binary=False):
     if not binary:
         # Write ASCII file
         exfile = open(fname,'w')
-        print >>exfile,";Written by dw_WritePointer"
-        print >>exfile,";nr of pointers is: ", str(pointer.shape[0])
+        print(";Written by dw_WritePointer", file=exfile)
+        print(";nr of pointers is: ", str(pointer.shape[0]), file=exfile)
         savetxt(exfile,pointer,fmt='%10.0f')
         exfile.close()   
     else:
@@ -372,12 +372,12 @@ def dw_mkDelwaqPointers(ldd,amap,difboun,layers):
     res = []
     for idd in range(1,difboun + 1):
         ct = list(np_catchid)
-        print "ct: "
-        print unique(ct)
+        print("ct: ")
+        print(unique(ct))
         for i in range(0,len(np_catchid)):
             ct[i] = np_catchid[i] + "_" + str(idd)
         res = res + ct
-    print unique(res)
+    print(unique(res))
     np_catchid = res
     #pointer = vstack((pointer,extraboun))
     # now catchment id's
@@ -460,7 +460,7 @@ def dw_Write_Times(dwdir,T0,timeSteps,timeStepSec):
     """
     # B1_T0.inc
     exfile = open(dwdir + "/B1_T0.inc",'w')
-    print >>exfile, "\'T0: " + T0.strftime("%Y.%m.%d %H:%M:%S") + "  (scu=       1s)\'"
+    print("\'T0: " + T0.strftime("%Y.%m.%d %H:%M:%S") + "  (scu=       1s)\'", file=exfile)
     exfile.close()
 
     # B2_outputtimers.inc
@@ -476,23 +476,23 @@ def dw_Write_Times(dwdir,T0,timeSteps,timeStepSec):
         
     exfile = open(dwdir + "/B2_outputtimers.inc",'w')
     etime = T0 + timeRange
-    print >>exfile, "  " + T0.strftime("%Y/%m/%d-%H:%M:%S") + "  " + etime.strftime("%Y/%m/%d-%H:%M:%S") + timestepstring
-    print >>exfile, "  " + T0.strftime("%Y/%m/%d-%H:%M:%S")  + "  " + etime.strftime("%Y/%m/%d-%H:%M:%S") + timestepstring
-    print >>exfile, "  " + T0.strftime("%Y/%m/%d-%H:%M:%S")  + "  " + etime.strftime("%Y/%m/%d-%H:%M:%S") + timestepstring 
+    print("  " + T0.strftime("%Y/%m/%d-%H:%M:%S") + "  " + etime.strftime("%Y/%m/%d-%H:%M:%S") + timestepstring, file=exfile)
+    print("  " + T0.strftime("%Y/%m/%d-%H:%M:%S")  + "  " + etime.strftime("%Y/%m/%d-%H:%M:%S") + timestepstring, file=exfile)
+    print("  " + T0.strftime("%Y/%m/%d-%H:%M:%S")  + "  " + etime.strftime("%Y/%m/%d-%H:%M:%S") + timestepstring, file=exfile) 
     exfile.close()
     
     #B2_simtimers.inc
     exfile = open(dwdir + "/B2_simtimers.inc",'w')
-    print >>exfile, "  " + T0.strftime("%Y/%m/%d-%H:%M:%S")
-    print >>exfile, "  " + etime.strftime("%Y/%m/%d-%H:%M:%S")
-    print >>exfile, "  0 ; timestep constant"
-    print >>exfile, "; dddhhmmss format for timestep"
-    print >>exfile, timestepstring + " ; timestep"
+    print("  " + T0.strftime("%Y/%m/%d-%H:%M:%S"), file=exfile)
+    print("  " + etime.strftime("%Y/%m/%d-%H:%M:%S"), file=exfile)
+    print("  0 ; timestep constant", file=exfile)
+    print("; dddhhmmss format for timestep", file=exfile)
+    print(timestepstring + " ; timestep", file=exfile)
     exfile.close()
     
     #B2_sysclock.inc
     exfile = open(dwdir + "/B2_sysclock.inc",'w')
-    print >>exfile,"%7d \'DDHHMMSS\' \'DDHHMMSS\'  ; system clock" % timeStepSec
+    print("%7d \'DDHHMMSS\' \'DDHHMMSS\'  ; system clock" % timeStepSec, file=exfile)
     exfile.close()
 
 
@@ -508,16 +508,16 @@ def dw_Write_Substances(fname,areas):
 
     exfile = open(fname,'w')
     areas = sorted(areas,reverse=True)
-    print >>exfile,"; number of active and inactive substances"
-    print >>exfile,"%d         0" % (len(areas) + 2)
-    print >>exfile,"; active substances"
-    print >>exfile, "1             \'Initial\' ; "
-    print >>exfile, "2             'Check' ; "
+    print("; number of active and inactive substances", file=exfile)
+    print("%d         0" % (len(areas) + 2), file=exfile)
+    print("; active substances", file=exfile)
+    print("1             \'Initial\' ; ", file=exfile)
+    print("2             'Check' ; ", file=exfile)
     j = 2
     for i in areas:
         j = j + 1
-        print >>exfile, "%d            \'Area_%s\'" %  (j,i)
-    print >>exfile,"; passive substances"
+        print("%d            \'Area_%s\'" %  (j,i), file=exfile)
+    print("; passive substances", file=exfile)
     
         
     exfile.close()
@@ -541,11 +541,11 @@ def dw_Write_B2_outlocs(fname,gauges,segs):
 
     pts = size(np_segs)
     exfile = open(fname,'w')
-    print >>exfile,"%d ; nr of locations" % pts
-    print >>exfile,"; \'outlocname\' numberofsegments segment list"
+    print("%d ; nr of locations" % pts, file=exfile)
+    print("; \'outlocname\' numberofsegments segment list", file=exfile)
     i = 0
     for loc in np_gauges:
-        print >>exfile," \'%d\' 1 %d" % (loc, np_segs[i])
+        print(" \'%d\' 1 %d" % (loc, np_segs[i]), file=exfile)
         i = i + 1
     exfile.close()
 
@@ -561,11 +561,11 @@ def dw_GetGridDimensions(ptid_map):
     zero_map = scalar(ptid_map) * 0.0
     allx = dw_pcrToDataBlock(xcoordinate(boolean(cover(zero_map + 1,1))))
     i = 0
-    diff = round(__builtin__.abs(allx[i] - allx[i+1]), 5)
+    diff = round(builtins.abs(allx[i] - allx[i+1]), 5)
     diff_next = diff
     while diff_next == diff:
         i += 1
-        diff_next = __builtin__.abs(allx[i] - allx[i+1])
+        diff_next = builtins.abs(allx[i] - allx[i+1])
         diff_next = round(diff_next, 5)
     m = i+1
     n = allx.shape[0] / m
@@ -1147,8 +1147,8 @@ def read_timestep(nc, var, timestep,logger, caseId, runId):
 
 def usage(*args):
     sys.stdout = sys.stderr
-    for msg in args: print msg
-    print __doc__
+    for msg in args: print(msg)
+    print(__doc__)
     sys.exit(0)
                 
 pointer = ""
@@ -1174,7 +1174,7 @@ def main():
 
     try:
         opts, args = getopt.getopt(sys.argv[1:], 'adD:C:R:S:hT:s:O:A:jc:n:')
-    except getopt.error, msg:
+    except getopt.error as msg:
         pcrut.usage(msg)
 
     nc_outmap_file = None

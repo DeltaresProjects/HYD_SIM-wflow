@@ -91,8 +91,8 @@ def usage(*args):
     
     """
     sys.stdout = sys.stderr
-    for msg in args: print msg
-    print __doc__
+    for msg in args: print(msg)
+    print(__doc__)
     sys.exit(0)
 
 
@@ -321,10 +321,10 @@ class WflowModel(DynamicModel):
     self.Slope=ifthen(boolean(self.TopoId),max(0.001,self.Slope*celllength()/self.reallength))
     
     # Multiply parameters with a factor (for calibration etc) -P option in command line
-    for k, v in multpars.iteritems():
+    for k, v in multpars.items():
         estr = k + "=" + k + "*" + str(v)
         self.logger.info("Parameter multiplication: " +  estr)
-        exec estr
+        exec(estr)
 
     self.SnowWater = self.ZeroMap 
     
@@ -402,10 +402,10 @@ class WflowModel(DynamicModel):
             #Inflow=spatial(scalar(0.0))
     
     # Multiply input parameters with a factor (for calibration etc) -p option in command line
-    for k, v in multdynapars.iteritems():
+    for k, v in multdynapars.items():
         estr = k + "=" + k + "*" + str(v)
         self.logger.debug("Dynamic Parameter multiplication: " +  estr)
-        exec estr    
+        exec(estr)    
     
     # Snow pack modelling degree day methods
     RainFrac=ifthenelse(1.0*self.TTI == 0.0,ifthenelse(Temperature <= self.TT,scalar(0.0),scalar(1.0)),min((Temperature-(self.TT-self.TTI/2.0))/self.TTI,scalar(1.0)))  
@@ -474,17 +474,17 @@ def main():
     ########################################################################
     try:
         opts, args = getopt.getopt(sys.argv[1:], 'Mc:QXS:hC:Ii:T:NR:u:s:P:p:Xx:U:f')
-    except getopt.error, msg:
+    except getopt.error as msg:
         pcrut.usage(msg)
     
     
     for o, a in opts:
         if o == '-P': 
-            exec "multpars =" + a
-            print "WARN: -P Does not work at the moment"
+            exec("multpars =" + a)
+            print("WARN: -P Does not work at the moment")
         if o == '-p': 
-            exec "multdynapars =" + a
-            print "WARN: -p Does not work at the moment"
+            exec("multdynapars =" + a)
+            print("WARN: -p Does not work at the moment")
         if o == '-C': caseName = a
         if o == '-R': runId = a
         if o == '-c': configfile = a

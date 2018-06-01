@@ -21,7 +21,7 @@ import glob
 import numpy as np
 
 # import admin packages
-import ConfigParser
+import configparser
 from optparse import OptionParser
 
 # import general packages
@@ -106,7 +106,7 @@ def main(source, destination, inifile, dem_in, rivshp, catchshp, gaugeshp=None,
     # parse other maps into an array
     if not other_maps == None:
         if type(other_maps) == str:
-            print other_maps
+            print(other_maps)
             other_maps = other_maps.replace(
                 ' ', '').replace('[', '').replace(']', '').split(',')
 
@@ -129,16 +129,16 @@ def main(source, destination, inifile, dem_in, rivshp, catchshp, gaugeshp=None,
         parser.print_help()
         sys.exit(1)
     if (inifile is not None) and (not os.path.exists(inifile)):
-        print 'path to ini file cannot be found'
+        print('path to ini file cannot be found')
         sys.exit(1)
     if not os.path.exists(rivshp):
-        print 'path to river shape cannot be found'
+        print('path to river shape cannot be found')
         sys.exit(1)
     if not os.path.exists(catchshp):
-        print 'path to catchment shape cannot be found'
+        print('path to catchment shape cannot be found')
         sys.exit(1)
     if not os.path.exists(dem_in):
-        print 'path to DEM cannot be found'
+        print('path to DEM cannot be found')
         sys.exit(1)
 
     # open a logger, dependent on verbose print to screen or not
@@ -176,7 +176,7 @@ def main(source, destination, inifile, dem_in, rivshp, catchshp, gaugeshp=None,
     # READ CONFIG FILE
     # open config-file
     if inifile is None:
-        config = ConfigParser.SafeConfigParser()
+        config = configparser.SafeConfigParser()
         config.optionxform = str
     else:
         config = wt.OpenConf(inifile)
@@ -213,7 +213,7 @@ def main(source, destination, inifile, dem_in, rivshp, catchshp, gaugeshp=None,
                                     datatype='int')
     try:
         percentiles = np.array(config.get('parameters', 'statisticmaps', '0, 100').replace(' ', '').split(','), dtype='float')
-    except ConfigParser.NoOptionError:
+    except configparser.NoOptionError:
         percentiles = [0.0, 100.0]
     # read the parameters for generating a temporary very high resolution grid
     if unit_clone == 'degree':

@@ -40,7 +40,7 @@ import wflow.wflow_lib as tr
 import os
 import os.path
 import getopt
-import ConfigParser
+import configparser
 import sys
 import gc
 import numpy as np
@@ -49,8 +49,8 @@ import numpy as np
 
 def usage(*args):
     sys.stdout = sys.stderr
-    for msg in args: print msg
-    print __doc__
+    for msg in args: print(msg)
+    print(__doc__)
     sys.exit(0)
 
 
@@ -62,20 +62,20 @@ def configget(config,section,var,default):
     try:
         ret = config.get(section,var)
     except:
-        print "returning default (" + default + ") for " + section + ":" + var
+        print("returning default (" + default + ") for " + section + ":" + var)
         ret = default
         
     return ret
 
 
 def OpenConf(fn):
-    config = ConfigParser.SafeConfigParser()
+    config = configparser.SafeConfigParser()
     config.optionxform = str
 
     if os.path.exists(fn):
         config.read(fn)
     else:
-        print "Cannot open config file: " + fn
+        print("Cannot open config file: " + fn)
         sys.exit(1)
         
     return config
@@ -104,7 +104,7 @@ def main():
     
     try:
         opts, args = getopt.getopt(sys.argv[1:], 'W:hI:f')
-    except getopt.error, msg:
+    except getopt.error as msg:
         usage(msg)
 
 
@@ -129,7 +129,7 @@ def main():
         gauges_x = config.get("settings","gauges_x")
         gauges_y = config.get("settings","gauges_y")
     except:
-        print "gauges_x and  gauges_y are required entries in the ini file"
+        print("gauges_x and  gauges_y are required entries in the ini file")
         sys.exit(1)
 
     step1dir = configget(config,"directories","step1dir","step1")
@@ -151,8 +151,8 @@ def main():
     lu_paved= configget(config,"files","lu_paved","")
     
     # X/Y coordinates of the gauges the system
-    exec "X=np.array(" + gauges_x + ")"
-    exec "Y=np.array(" + gauges_y + ")"
+    exec("X=np.array(" + gauges_x + ")")
+    exec("Y=np.array(" + gauges_y + ")")
 
     tr.Verbose=1
 
@@ -164,7 +164,7 @@ def main():
 
 
     if initialscale > 1:
-        print "Initial scaling of DEM..."
+        print("Initial scaling of DEM...")
         os.system("resample -r " + str(initialscale) + " "  + masterdem + " " + step1dir + "/dem_scaled.map")
         print("Reading dem...")
         dem = tr.readmap(step1dir + "/dem_scaled.map") 
@@ -178,9 +178,9 @@ def main():
     try:
         catchmask = config.get("files","catchment_mask")
     except:
-        print "No catchment mask..."
+        print("No catchment mask...")
     else:
-        print "clipping DEM with mask....."
+        print("clipping DEM with mask.....")
         mask=tr.readmap(catchmask)
         ldddem = tr.ifthen(tr.boolean(mask),ldddem)
         dem = tr.ifthen(tr.boolean(mask),dem)
@@ -190,11 +190,11 @@ def main():
     try:
         rivshp = config.get("files","river")
     except:
-        print "no river file specified"
+        print("no river file specified")
         outletpointX = float(configget(config,"settings","outflowpointX","0.0"))
         outletpointY = float(configget(config,"settings","outflowpointY","0.0"))       
     else:
-        print "river file specified....."
+        print("river file specified.....")
         try:
             outletpointX = float(configget(config,"settings","outflowpointX","0.0"))
             outletpointY = float(configget(config,"settings","outflowpointY","0.0"))
@@ -240,7 +240,7 @@ def main():
     outlmap = tr.points_to_map(dem,X,Y,0.5)
 
     if snapgaugestoriver:
-        print "Snapping gauges to nearest river cells..."
+        print("Snapping gauges to nearest river cells...")
         tr.report(outlmap,step1dir + "/orggauges.map")
         outlmap= tr.snaptomap(outlmap,strdir)
 
@@ -255,13 +255,13 @@ def main():
     try:
         catchmask = config.get("files","catchment_mask")
     except:
-        print "No catchment mask, finding outlet"
+        print("No catchment mask, finding outlet")
         # Find catchment (overall)
         outlet = tr.find_outlet(ldd)
         sub = tr.subcatch(ldd,outlet)
         tr.report(sub,step1dir + "/catchment_overall.map")
     else:
-        print "reading and converting catchment mask....."
+        print("reading and converting catchment mask.....")
         os.system("resample -r " + str(initialscale) + " "  + catchmask + " " + step1dir + "/catchment_overall.map")
         sub = tr.readmap(step1dir + "/catchment_overall.map")
 
@@ -270,7 +270,7 @@ def main():
     tr.report(sd,step1dir + "/scatch.map")
 
     tr.setglobaloption("unitcell")
-    print "Upscalefactor: " + str(upscalefactor)
+    print("Upscalefactor: " + str(upscalefactor))
           
     if upscalefactor > 1:
         gc.collect()
@@ -318,7 +318,7 @@ def main():
          Ylr = float(config.get("settings","Ylr"))
          gdalstr = "gdal_translate  -projwin " + str(Xul) + " " + str(Yul) + " " +str(Xlr) + " " +str(Ylr) + " -of PCRaster  " 
          #gdalstr = "gdal_translate  -a_ullr " + str(Xul) + " " + str(Yul) + " " +str(Xlr) + " " +str(Ylr) + " -of PCRaster  " 
-         print gdalstr
+         print(gdalstr)
          tr.report(tr.cover(1.0),step1dir + "/wflow_riverlength_fact.map")
          # Now us gdat tp convert the maps
          os.system(gdalstr + step1dir + "/wflow_riverlength_fact.map" + " " + step2dir + "/wflow_riverlength_fact.map")
@@ -342,7 +342,7 @@ def main():
          try:
             lumap = config.get("files","landuse")
          except:
-            print "no landuse map...creating uniform map"
+            print("no landuse map...creating uniform map")
             #clone=tr.readmap(step2dir + "/wflow_dem.map")
             tr.setclone(step2dir + "/wflow_dem.map")
             tr.report(tr.nominal(1),step2dir + "/wflow_landuse.map")
@@ -352,7 +352,7 @@ def main():
          try:
              soilmap = config.get("files","soil")
          except:
-             print "no soil map..., creating uniform map"
+             print("no soil map..., creating uniform map")
              tr.setclone(step2dir + "/wflow_dem.map")
              tr.report(tr.nominal(1),step2dir + "/wflow_soil.map")  
          else:

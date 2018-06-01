@@ -75,7 +75,7 @@ import osgeo.gdal as gdal
 import os
 import logging
 import logging.handlers
-import ConfigParser
+import configparser
 import wflow.pcrut as _pcrut
 import osgeo.gdal as gdal
 import wflow.wf_netcdfio as ncdf
@@ -83,8 +83,8 @@ import glob
 
 def usage(*args):
     sys.stdout = sys.stderr
-    for msg in args: print msg
-    print __doc__
+    for msg in args: print(msg)
+    print(__doc__)
     sys.exit(0)
 
 def writeMap(fileName, fileFormat, x, y, data, FillVal):
@@ -109,8 +109,8 @@ def writeMap(fileName, fileFormat, x, y, data, FillVal):
     data[isnan(data)] = FillVal
     # Processing
     if verbose:
-        print 'Writing to temporary file ' + fileName + '.tif'
-        print "Output format: " + fileFormat
+        print('Writing to temporary file ' + fileName + '.tif')
+        print("Output format: " + fileFormat)
     # Create Output filename from (FEWS) product name and date and open for writing
     TempDataset = driver1.Create(fileName + '.tif',data.shape[1],data.shape[0],1,gdal.GDT_Float32)
     # Give georeferences
@@ -127,7 +127,7 @@ def writeMap(fileName, fileFormat, x, y, data, FillVal):
 
     # Create data to write to correct format (supported by 'CreateCopy')
     if verbose:
-        print 'Writing to ' + fileName + '.map'
+        print('Writing to ' + fileName + '.map')
     if fileFormat == 'GTiff':
         outDataset = driver2.CreateCopy(fileName, TempDataset, 0 ,options = ['COMPRESS=LZW'])
     else:
@@ -135,11 +135,11 @@ def writeMap(fileName, fileFormat, x, y, data, FillVal):
     TempDataset = None
     outDataset = None
     if verbose:
-        print 'Removing temporary file ' + fileName + '.tif'
+        print('Removing temporary file ' + fileName + '.tif')
     os.remove(fileName + '.tif');
 
     if verbose:
-        print 'Writing to ' + fileName + ' is done!'
+        print('Writing to ' + fileName + ' is done!')
 
 def readMap(fileName, fileFormat,logger,unzipcmd='pigz -d -k'):
     """ 
@@ -219,12 +219,12 @@ def getnetcdfmetafromini(inifile):
     """
     metadata = {}
 
-    config = ConfigParser.SafeConfigParser()
+    config = configparser.SafeConfigParser()
     config.optionxform = str
     if os.path.exists(inifile):
         config.read(inifile)
     else:
-        print ("Cannot open ini file: " +  inifile)
+        print(("Cannot open ini file: " +  inifile))
         exit(1)
 
     metadata = dict(config.items('metadata'))
@@ -241,12 +241,12 @@ def getvarmetadatafromini(inifile,var):
     """
     metadata = {}
 
-    config = ConfigParser.SafeConfigParser()
+    config = configparser.SafeConfigParser()
     config.optionxform = str
     if os.path.exists(inifile):
         config.read(inifile)
     else:
-        print ("Cannot open ini file: " +  inifile)
+        print(("Cannot open ini file: " +  inifile))
         exit(1)
 
     metadata = dict(config.items(var))
@@ -391,7 +391,7 @@ def setlogger(logfilename,loggername, thelevel=logging.INFO):
         logger.debug("File logging to " + logfilename)
         return logger
     except IOError:
-        print "ERROR: Failed to initialize logger with logfile: " + logfilename
+        print("ERROR: Failed to initialize logger with logfile: " + logfilename)
         sys.exit(2)
 
 # def date_range(start, end, tdelta="days"):
@@ -473,7 +473,7 @@ def main(argv=None):
     ########################################################################
     try:
         opts, args = getopt.getopt(argv, 'c:S:E:N:I:O:b:t:F:zs:d:YP:Mi:C:')
-    except getopt.error, msg:
+    except getopt.error as msg:
         usage(msg)
 
     for o, a in opts:

@@ -32,8 +32,8 @@ from wflow.wflow_adapt import *
 
 def usage(*args):
     sys.stdout = sys.stderr
-    for msg in args: print msg
-    print __doc__
+    for msg in args: print(msg)
+    print(__doc__)
     sys.exit(0)
 
 class WflowModel(DynamicModel):  
@@ -184,7 +184,7 @@ class WflowModel(DynamicModel):
     except:
         self.logger.warn("Cannot load initial states, setting to default")
         for s in self.stateVariables():
-            exec "self." + s + " = cover(1.0)"
+            exec("self." + s + " = cover(1.0)")
 
 
   def default_summarymaps(self):
@@ -216,11 +216,11 @@ class WflowModel(DynamicModel):
         if self.interpolationmethod == 'thiessen':
             Unq = uniqueid(boolean(abs(tmp) + 1.0 ))
             GaugeArea = spreadzone(ordinal(cover(Unq,0)),0,1);
-            exec 'self.' + var + ' = areaaverage(tmp,GaugeArea)'
+            exec('self.' + var + ' = areaaverage(tmp,GaugeArea)')
         elif self.interpolationmethod == 'inverse':
-            exec 'self.' + var + '=inversedistance(1,tmp,' + str(self.inversepower) + ',0,0)'
+            exec('self.' + var + '=inversedistance(1,tmp,' + str(self.inversepower) + ',0,0)')
         else:
-            print 'not implemented:' + self.interpolationmethod
+            print('not implemented:' + self.interpolationmethod)
 
 
 

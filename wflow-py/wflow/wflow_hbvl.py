@@ -83,7 +83,7 @@ import getopt
 from wflow.wf_DynamicFramework import *
 from wflow.wf_DynamicFramework import *
 from wflow.wflow_adapt import *
-from wflow_adapt import *    
+from .wflow_adapt import *    
         
 #import scipy
 #import pcrut
@@ -105,8 +105,8 @@ def usage(*args):
     -  *args: command line arguments given
     """
     sys.stdout = sys.stderr
-    for msg in args: print msg
-    print __doc__
+    for msg in args: print(msg)
+    print(__doc__)
     sys.exit(0)
 
 class WflowModel(DynamicModel):
@@ -536,14 +536,14 @@ def main(argv=None):
     ########################################################################
     try:
         opts, args = getopt.getopt(argv, 'c:QXS:hC:Ii:T:R:u:s:P:p:Xx:U:fl:L:')
-    except getopt.error, msg:
+    except getopt.error as msg:
         pcrut.usage(msg)
     
     for o, a in opts:
         if o == '-C': caseName = a
         if o == '-R': runId = a
         if o == '-L': LogFileName = a 
-        if o == '-l': exec "loglevel = logging." + a           
+        if o == '-l': exec("loglevel = logging." + a)           
         if o == '-c': configfile = a
         if o == '-s': timestepsecs = int(a)
         if o == '-T': _lastTimeStep=int(a)
@@ -554,10 +554,10 @@ def main(argv=None):
 
      
 
-    starttime = dt.datetime(1990,01,01)
+    starttime = dt.datetime(1990,0o1,0o1)
        
     if _lastTimeStep < _firstTimeStep:
-        print "The starttimestep (" + str(_firstTimeStep) +") is smaller than the last timestep (" + str(_lastTimeStep) + ")"
+        print("The starttimestep (" + str(_firstTimeStep) +") is smaller than the last timestep (" + str(_lastTimeStep) + ")")
         usage()
  
     myModel = WflowModel(wflow_cloneMap, caseName,runId,configfile)
@@ -585,7 +585,7 @@ def main(argv=None):
             configset(myModel.config,'model','updateFile',a,overwrite=True)
             configset(myModel.config,'model','updating',"1",overwrite=True)
         if o == '-u':
-            exec "zz =" +  a
+            exec("zz =" +  a)
             updateCols = zz
 
     dynModelFw.setupFramework()

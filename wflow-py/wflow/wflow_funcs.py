@@ -153,7 +153,7 @@ def rainfall_interception_modrut(Precipitation,PotEvap,CanopyStorage,CanopyGapFr
 # see http://mssanz.org.au/MODSIM97/Vol%201/Chapman.pdf
 
 def bf_oneparam(discharge, k):
-    bf = range(0,len(discharge))
+    bf = list(range(0,len(discharge)))
     for i in range(1,len(discharge)):
         bf[i] = (k*bf[i-1]/(2.0-k)) + ((1.0-k)*discharge[i]/(2.0-k))
         if bf[i] > discharge[i]:
@@ -163,7 +163,7 @@ def bf_oneparam(discharge, k):
 
 
 def bf_twoparam(discharge, k,C):
-    bf = range(0,len(discharge))
+    bf = list(range(0,len(discharge)))
     for i in range(1,len(discharge)):
         bf[i] = (k*bf[i-1]/(1.0+C)) + ((C)*discharge[i]/(1.0+C))
         if bf[i] > discharge[i]:
@@ -173,7 +173,7 @@ def bf_twoparam(discharge, k,C):
 
 
 def bf_threeparam(discharge, k,C,a):
-    bf = range(0,len(discharge))
+    bf = list(range(0,len(discharge)))
     for i in range(1,len(discharge)):
         bf[i] = (k*bf[i-1]/(1.0+C)) + ((C)*discharge[i] + a*discharge[i-1]/(1.0+C))
         if bf[i] > discharge[i]:

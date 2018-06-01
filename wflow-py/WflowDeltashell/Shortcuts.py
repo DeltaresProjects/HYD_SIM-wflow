@@ -50,7 +50,7 @@ def _GetShortcutsTab(tabName, create = True):
 			ribbon = child
 	
 	if (ribbon == None) :
-		print "Could not find Ribbon"
+		print("Could not find Ribbon")
 		return None
 	
 	# Search for existing Shortcuts tab

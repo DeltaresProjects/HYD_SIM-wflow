@@ -602,7 +602,7 @@ def get_box_plot_parameters(values, N="", NoData=NoDataVal):
     try:
         while tmpvalues[0] == NoData and len(tmpvalues) > 0:
             del tmpvalues[0]
-    except IndexError, errstr:
+    except IndexError as errstr:
 	return ( NoData, NoData, NoData, NoData, NoData, NoData, NoData,
                  [NoData], [NoData] )            
             

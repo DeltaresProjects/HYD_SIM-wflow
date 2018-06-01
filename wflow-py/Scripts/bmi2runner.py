@@ -61,10 +61,10 @@ bmiobj.update_to_start_time(start)
 ts = bmiobj.get_time_step()
 steps = int((end - start)/ts + 1)
 
-print 'start = ', start#time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(start))
-print 'start time rtc =', time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(bmiobj.bmimodels['RTC-Tools'].get_start_time()))
-print 'start time wflow =', time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(bmiobj.bmimodels['wflow_sbm'].get_start_time()))
-print 'start time lintul =', time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(bmiobj.bmimodels['wflow_lintul'].get_start_time()))
+print('start = ', start)#time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(start))
+print('start time rtc =', time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(bmiobj.bmimodels['RTC-Tools'].get_start_time())))
+print('start time wflow =', time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(bmiobj.bmimodels['wflow_sbm'].get_start_time())))
+print('start time lintul =', time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(bmiobj.bmimodels['wflow_lintul'].get_start_time())))
 
 
 cts = bmiobj.currenttimestep

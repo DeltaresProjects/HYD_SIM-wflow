@@ -297,7 +297,7 @@ def main():
     (options, args) = parser.parse_args()
 
     if not os.path.exists(options.inifile):
-        print 'path to ini file cannot be found'
+        print('path to ini file cannot be found')
         sys.exit(1)
     options.dest_path = os.path.abspath(options.dest_path)
 
@@ -759,7 +759,7 @@ def main():
                                              (x_end + x_overlap_max) - (x_start - x_overlap_min),
                                              (y_end + y_overlap_max) - (y_start - y_overlap_min)
                                              )
-                print('len x-ax: {:d} len y-ax {:d} x-shape {:d} y-shape {:d}'.format(len(x_tile_ax), len(y_tile_ax), hand.shape[1], hand.shape[0]))
+                print(('len x-ax: {:d} len y-ax {:d} x-shape {:d} y-shape {:d}'.format(len(x_tile_ax), len(y_tile_ax), hand.shape[1], hand.shape[0])))
 
                 inun_lib.gdal_writemap(hand_temp_file, 'PCRaster',
                           x_tile_ax,

@@ -32,8 +32,8 @@ import pcraster as pcr
 import logging
 logger = logging.getLogger('wflow_pcrglobwb')
 
-import virtualOS as vos
-from ncConverter import *
+from . import virtualOS as vos
+from .ncConverter import *
 
 from wflow.wf_DynamicFramework import configsection
 from wflow.wf_DynamicFramework import configget
@@ -160,7 +160,7 @@ class Groundwater(object):
                self.recessionCoeff = vos.readPCRmapClone(iniItems.get("groundwaterOptions","recessionCoeff"),self.cloneMap,self.tmpDir,self.inputDir)
 
         # calculate the reccession coefficient based on the given parameters
-        if isinstance(self.recessionCoeff,types.NoneType) and\
+        if isinstance(self.recessionCoeff,type(None)) and\
                           'recessionCoeff' not in iniItems._sections['groundwaterOptions']:
 
             msg = "Calculating the groundwater linear reccesion coefficient based on the given parameters."

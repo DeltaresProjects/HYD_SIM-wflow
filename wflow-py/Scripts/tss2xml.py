@@ -20,8 +20,8 @@ import sys
 
 def usage(*args):
     sys.stdout = sys.stderr
-    for msg in args: print msg
-    print __doc__
+    for msg in args: print(msg)
+    print(__doc__)
     sys.exit(0)
 
 
@@ -46,7 +46,7 @@ def main(argv=None):
 
     try:
         opts, args = getopt.getopt(argv, 'X:I:S')
-    except getopt.error, msg:
+    except getopt.error as msg:
         pcrut.usage(msg)
 
     for o, a in opts:

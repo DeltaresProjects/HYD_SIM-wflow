@@ -111,8 +111,8 @@ def usage(*args):
     -  *args: command line arguments given
     """
     sys.stdout = sys.stderr
-    for msg in args: print msg
-    print __doc__
+    for msg in args: print(msg)
+    print(__doc__)
     sys.exit(0)
 
 class WflowModel(DynamicModel):
@@ -1017,7 +1017,7 @@ def main(argv=None):
     ########################################################################
     try:
         opts, args = getopt.getopt(argv, 'c:QXS:F:hC:Ii:T:R:u:s:P:p:Xx:U:fl:L:')
-    except getopt.error, msg:
+    except getopt.error as msg:
         pcrut.usage(msg)
 
     for o, a in opts:
@@ -1028,7 +1028,7 @@ def main(argv=None):
         if o == '-C': caseName = a
         if o == '-R': runId = a
         if o == '-L': LogFileName = a
-        if o == '-l': exec "loglevel = logging." + a
+        if o == '-l': exec("loglevel = logging." + a)
         if o == '-c': configfile = a
         if o == '-s': timestepsecs = int(a)
         if o == '-h': usage()
@@ -1043,13 +1043,13 @@ def main(argv=None):
             _lastTimeStep =  ts# * 86400/timestepsecs
             _firstTimeStep = 1
         else:
-            print "Failed to get timesteps from runinfo file: " + runinfoFile
+            print("Failed to get timesteps from runinfo file: " + runinfoFile)
             sys.exit(2)
     else:
-        starttime = dt.datetime(1990,01,01)
+        starttime = dt.datetime(1990,0o1,0o1)
 
     if _lastTimeStep < _firstTimeStep:
-        print "The starttimestep (" + str(_firstTimeStep) +") is smaller than the last timestep (" + str(_lastTimeStep) + ")"
+        print("The starttimestep (" + str(_firstTimeStep) +") is smaller than the last timestep (" + str(_lastTimeStep) + ")")
         usage()
 
     myModel = WflowModel(wflow_cloneMap, caseName,runId,configfile)
@@ -1078,7 +1078,7 @@ def main(argv=None):
             configset(myModel.config,'model','updateFile',a,overwrite=True)
             configset(myModel.config,'model','updating',"1",overwrite=True)
         if o == '-u':
-            exec "zz =" +  a
+            exec("zz =" +  a)
             updateCols = zz
         if o == '-T':
             configset(myModel.config, 'run', 'endtime', a, overwrite=True)

@@ -31,8 +31,8 @@ import pcraster as pcr
 import logging
 logger = logging.getLogger('wflow_pcrglobwb')
 
-import virtualOS as vos
-from ncConverter import *
+from . import virtualOS as vos
+from .ncConverter import *
 
 from wflow.wf_DynamicFramework import configsection
 from wflow.wf_DynamicFramework import configget
@@ -76,7 +76,7 @@ class LandCover(object):
         # - "Original" is principally the same as defined in van Beek et al., 2014 (default)
         # - "Modified" is with a modification by Edwin Sutanudjaja: extending interception definition, using totalPotET for the available energy  
         self.interceptionModuleType = "Original"
-        if "interceptionModuleType" in self.iniItemsLC.keys():
+        if "interceptionModuleType" in list(self.iniItemsLC.keys()):
             if self.iniItemsLC['interceptionModuleType'] == "Modified":
                 msg = 'Using the "Modified" version of the interception module (i.e. extending interception definition, using totalPotET for the available energy for the interception process).'
                 logger.info(msg)
@@ -90,7 +90,7 @@ class LandCover(object):
         
         # minimum interception capacity (only used if interceptionModuleType == "Modified", extended interception definition)
         self.minInterceptCap = 0.0
-        if self.interceptionModuleType == "Original" and "minInterceptCap" in self.iniItemsLC.keys():
+        if self.interceptionModuleType == "Original" and "minInterceptCap" in list(self.iniItemsLC.keys()):
             msg = 'As the "Original" interceptionModuleType is used, the "minInterceptCap" value is ignored. The interception scope is only "canopy".'
             logger.warning(msg)
         if self.interceptionModuleType == "Modified":
@@ -115,7 +115,7 @@ class LandCover(object):
         # In the original oldcalc script of Rens (2 layer model), the percolation percUpp (P1) can be negative
         # - To avoid this, Edwin changed few lines (see the method updateSoilStates)
         self.allowNegativePercolation = False
-        if 'allowNegativePercolation' in self.iniItemsLC.keys() and self.iniItemsLC['allowNegativePercolation'] == "True":
+        if 'allowNegativePercolation' in list(self.iniItemsLC.keys()) and self.iniItemsLC['allowNegativePercolation'] == "True":
             msg  = 'Allowing negative values of percolation percUpp (P1), as done in the oldcalc script of PCR-GLOBWB 1.0. ' #\n'
             msg += 'Note that this option is only relevant for the two layer soil model.'
             logger.warning(msg)
@@ -124,7 +124,7 @@ class LandCover(object):
         # In the original oldcalc script of Rens, there is a possibility that rootFraction/transpiration is only defined in the bottom layer, while no root in upper layer(s) 
         # - To avoid this, Edwin changed few lines (see the methods 'scaleRootFractionsFromTwoLayerSoilParameters' and 'estimateTranspirationAndBareSoilEvap')
         self.usingOriginalOldCalcRootTranspirationPartitioningMethod = False
-        if 'usingOriginalOldCalcRootTranspirationPartitioningMethod' in self.iniItemsLC.keys() and self.iniItemsLC['usingOriginalOldCalcRootTranspirationPartitioningMethod'] == "True":
+        if 'usingOriginalOldCalcRootTranspirationPartitioningMethod' in list(self.iniItemsLC.keys()) and self.iniItemsLC['usingOriginalOldCalcRootTranspirationPartitioningMethod'] == "True":
             msg  = 'Using the original rootFraction/transpiration as defined in the oldcalc script of PCR-GLOBWB 1.0. '#\n'
             msg += 'There is a possibility that rootFraction/transpiration is only defined in the bottom layer, while no root in upper layer(s).'
             logger.warning(msg)
@@ -225,7 +225,7 @@ class LandCover(object):
                       #~ self.iniItemsLC['coverFractionNC'], self.inputDir)
         
         # get the file names of interceptCap and coverFraction files:
-        if 'interceptCapNC' in self.iniItemsLC.keys() and 'coverFractionNC' in self.iniItemsLC.keys():
+        if 'interceptCapNC' in list(self.iniItemsLC.keys()) and 'coverFractionNC' in list(self.iniItemsLC.keys()):
             self.interceptCapNC = vos.getFullPath(\
                        self.iniItemsLC['interceptCapNC'], self.inputDir)
             self.coverFractionNC = vos.getFullPath(\
@@ -346,7 +346,7 @@ class LandCover(object):
             #   3. approximated from the minSoilDepthFrac and maxSoilDepthFrac
 
             lc_parameters['arnoBeta'] = None
-            if 'arnoBeta' not in self.iniItemsLC.keys() and get_only_fracVegCover == False: self.iniItemsLC['arnoBeta'] = "None" 
+            if 'arnoBeta' not in list(self.iniItemsLC.keys()) and get_only_fracVegCover == False: self.iniItemsLC['arnoBeta'] = "None" 
 
             # - option one (top priority): using a pcraster file
             if self.iniItemsLC['arnoBeta'] != "None" and get_only_fracVegCover == False: 
@@ -356,7 +356,7 @@ class LandCover(object):
                                                                 self.tmpDir, self.inputDir)
 
             # - option two: included in the netcdf file
-            if isinstance(lc_parameters['arnoBeta'], types.NoneType) and landCoverPropertiesNC != None and get_only_fracVegCover == False:   
+            if isinstance(lc_parameters['arnoBeta'], type(None)) and landCoverPropertiesNC != None and get_only_fracVegCover == False:   
                                     
                 if vos.checkVariableInNC(landCoverPropertiesNC, "arnoBeta"):
                     
@@ -364,7 +364,7 @@ class LandCover(object):
                     lc_parameters['arnoBeta'] = vos.netcdf2PCRobjCloneWithoutTime(landCoverPropertiesNC, 'arnoBeta', self.cloneMap)
                                         
             # - option three: approximated from the minSoilDepthFrac and maxSoilDepthFrac
-            if isinstance(lc_parameters['arnoBeta'], types.NoneType) and get_only_fracVegCover == False:
+            if isinstance(lc_parameters['arnoBeta'], type(None)) and get_only_fracVegCover == False:
    
                 logger.debug("The parameter arnoBeta is approximated from the minSoilDepthFrac and maxSoilDepthFrac values.")
                 
@@ -415,7 +415,7 @@ class LandCover(object):
 
             # if not defined, arnoBeta would be approximated from the minSoilDepthFrac and maxSoilDepthFrac
             if get_only_fracVegCover == False and\
-               isinstance(lc_parameters['arnoBeta'], types.NoneType):
+               isinstance(lc_parameters['arnoBeta'], type(None)):
 
                 logger.debug("The parameter arnoBeta is approximated from the minSoilDepthFrac and maxSoilDepthFrac values.")
 
@@ -508,10 +508,10 @@ class LandCover(object):
         min_percolation_loss = 0.006
         max_percolation_loss = 0.008 
         # - Minimum and maximum percolation loss values given in the ini or configuration file:
-        if 'minPercolationLoss' in iniPaddyOptions.keys() and iniPaddyOptions['minPercolationLoss'] != "None":
+        if 'minPercolationLoss' in list(iniPaddyOptions.keys()) and iniPaddyOptions['minPercolationLoss'] != "None":
             min_percolation_loss = vos.readPCRmapClone(iniPaddyOptions['minPercolationLoss'], self.cloneMap, 	
                                                        self.tmpDir, self.inputDir)
-        if 'maxPercolationLoss' in iniPaddyOptions.keys() and iniPaddyOptions['maxPercolationLoss'] != "None":
+        if 'maxPercolationLoss' in list(iniPaddyOptions.keys()) and iniPaddyOptions['maxPercolationLoss'] != "None":
             min_percolation_loss = vos.readPCRmapClone(iniPaddyOptions['maxPercolationLoss'], self.cloneMap, 	
                                                        self.tmpDir, self.inputDir)
         # - percolation loss at paddy fields (m/day)

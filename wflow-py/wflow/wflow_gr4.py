@@ -47,8 +47,8 @@ from  wflow.wflow_adapt  import *
 
 def usage(*args):
     sys.stdout = sys.stderr
-    for msg in args: print msg
-    print __doc__
+    for msg in args: print(msg)
+    print(__doc__)
     sys.exit(0)
 
 
@@ -436,7 +436,7 @@ def main(argv=None):
         if o == '-S': _firstTimeStep=int(a)
         if o == '-f': NoOverWrite = 0
         if o == '-h': usage()
-        if o == '-l': exec "loglevel = logging." + a
+        if o == '-l': exec("loglevel = logging." + a)
 
         
     if (len(opts) <=1):
@@ -444,7 +444,7 @@ def main(argv=None):
 
        
     if _lastTimeStep < _firstTimeStep:
-        print "The starttimestep (" + str(_firstTimeStep) +") is smaller than the last timestep (" + str(_lastTimeStep) + ")"
+        print("The starttimestep (" + str(_firstTimeStep) +") is smaller than the last timestep (" + str(_lastTimeStep) + ")")
         usage()
 
         

@@ -54,8 +54,8 @@ def usage(*args):
     -  *args: command line arguments given
     """
     sys.stdout = sys.stderr
-    for msg in args: print msg
-    print __doc__
+    for msg in args: print(msg)
+    print(__doc__)
     sys.exit(0)
 
 class WflowModel(DynamicModel):
@@ -241,10 +241,10 @@ class WflowModel(DynamicModel):
     # self.SubCatchFlowOnly = int(configget(self.config, 'model', 'SubCatchFlowOnly', '0'))
 
 	# Print model info
-    print 	'The Spatial Processes in HYdrology (SPHY) model is ' \
-        'developed and owned by FutureWater, Wageningen, The Netherlands'
-    print   'Version 2.1'
-    print ' '
+    print('The Spatial Processes in HYdrology (SPHY) model is ' \
+        'developed and owned by FutureWater, Wageningen, The Netherlands')
+    print('Version 2.1')
+    print(' ')
 
 	# Read the modules to be used
     self.GlacFLAG = int(configget(self.config,'MODULES','GlacFLAG','0'))
@@ -542,7 +542,7 @@ class WflowModel(DynamicModel):
     	try:
     		self.UpdateLakeLevel = readmap(self.inpath + config.get('LAKE','updatelakelevel'))
     		self.LLevel = self.inpath + config.get('LAKE','LakeFile')
-    		print 'measured lake levels will be used to update lake storage'
+    		print('measured lake levels will be used to update lake storage')
     	except:
     		pass
     	
@@ -692,7 +692,7 @@ class WflowModel(DynamicModel):
     	# except:
     		# self.GlacFrac = readmap(self.inpath + config.get('GLACIER_INIT','GlacFrac'))
         self.GlacFrac = readmap(os.path.join(self.Dir,"staticmaps",configget(self.config,'GLACIER_INIT','GlacFrac','glacierfraction.map')))
-        print self.GlacFrac
+        print(self.GlacFrac)
     #-initial routed total runoff and of individual components
     if self.RoutFLAG == 1 or self.LakeFLAG==1 or self.ResFLAG==1:
     	#-initial routed total runoff
@@ -843,9 +843,9 @@ class WflowModel(DynamicModel):
         TSoutops = configget(self.config,'REPORTING',i+'_TSoutput',i+'_TSoutput')
 		#TSoutops = config.get('REPORTING', i+'_TSoutput')
     	if mapoutops == 'NONE' and TSoutops == 'NONE':
-    		print i + ' will NOT be reported'
+    		print(i + ' will NOT be reported')
     	else:
-    		print i + ' will be reported'
+    		print(i + ' will be reported')
     		fname = configget(self.config,'REPORTING', i+'_fname', i+'_fname')
 			#fname = config.get('REPORTING', i+'_fname')
     		setattr(self, i+'_fname', fname)
@@ -1494,7 +1494,7 @@ def main(argv=None):
     ########################################################################
     try:
         opts, args = getopt.getopt(argv, 'c:QXS:F:hC:Ii:T:R:u:s:P:p:Xx:U:fl:L:')
-    except getopt.error, msg:
+    except getopt.error as msg:
         pcrut.usage(msg)
 
     for o, a in opts:
@@ -1505,7 +1505,7 @@ def main(argv=None):
         if o == '-C': caseName = a
         if o == '-R': runId = a
         if o == '-L': LogFileName = a
-        if o == '-l': exec "loglevel = logging." + a
+        if o == '-l': exec("loglevel = logging." + a)
         if o == '-c': configfile = a
         if o == '-s': timestepsecs = int(a)
         if o == '-h': usage()
@@ -1520,13 +1520,13 @@ def main(argv=None):
             _lastTimeStep =  ts# * 86400/timestepsecs
             _firstTimeStep = 1
         else:
-            print "Failed to get timesteps from runinfo file: " + runinfoFile
+            print("Failed to get timesteps from runinfo file: " + runinfoFile)
             sys.exit(2)
     else:
-        starttime = dt.datetime(1990,01,01)
+        starttime = dt.datetime(1990,0o1,0o1)
 
     if _lastTimeStep < _firstTimeStep:
-        print "The starttimestep (" + str(_firstTimeStep) +") is smaller than the last timestep (" + str(_lastTimeStep) + ")"
+        print("The starttimestep (" + str(_firstTimeStep) +") is smaller than the last timestep (" + str(_lastTimeStep) + ")")
         usage()
 
     myModel = WflowModel(wflow_cloneMap, caseName,runId,configfile)
@@ -1555,7 +1555,7 @@ def main(argv=None):
             configset(myModel.config,'model','updateFile',a,overwrite=True)
             configset(myModel.config,'model','updating',"1",overwrite=True)
         if o == '-u':
-            exec "zz =" +  a
+            exec("zz =" +  a)
             updateCols = zz
         if o == '-T':
             configset(myModel.config, 'run', 'endtime', a, overwrite=True)

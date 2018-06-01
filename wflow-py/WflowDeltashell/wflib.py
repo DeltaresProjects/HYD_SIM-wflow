@@ -51,7 +51,7 @@ def getrunids(casedir):
 		dn = os.path.basename(os.path.dirname(dir))
 		if dn not in "intbl staticmaps inmaps instate intss outstate":
 			ret.append(dir)
-			print dn
+			print(dn)
 			
 	return ret			
 	
