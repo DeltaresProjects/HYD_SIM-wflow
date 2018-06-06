@@ -764,7 +764,7 @@ class WflowModel(DynamicModel):
     self.PotEvaporation=exp(-self.EPF*self.Precipitation)*self.ECORR * self.PotEvaporation  # correction for potential evaporation on wet days
     self.PotEvaporation=self.CEVPF*self.PotEvaporation  # Correct per landuse
 
-    self.IntEvap=min(self.InterceptionStorage,self.PotEvaporation) 	 #: Evaporation from interception storage
+    self.IntEvap=min(self.InterceptionStorage,self.PotEvaporation)  #: Evaporation from interception storage
     self.InterceptionStorage=self.InterceptionStorage-self.IntEvap
 
     # I nthe origal HBV code
@@ -783,7 +783,7 @@ class WflowModel(DynamicModel):
     PotSnowMelt=ifthenelse(self.Temperature > self.TT,self.Cfmax*(self.Temperature-self.TT),scalar(0.0)) #Potential snow melt, based on temperature
     PotRefreezing=ifthenelse(self.Temperature < self.TT, self.Cfmax*self.CFR*(self.TT-self.Temperature),0.0)    #Potential refreezing, based on temperature
 
-    Refreezing=ifthenelse(self.Temperature < self.TT,min(PotRefreezing,self.FreeWater),0.0)   	#actual refreezing
+    Refreezing=ifthenelse(self.Temperature < self.TT,min(PotRefreezing,self.FreeWater),0.0)  #actual refreezing
     self.SnowMelt=min(PotSnowMelt,self.DrySnow)          #actual snow melt
     self.DrySnow=self.DrySnow+SnowFall+Refreezing-self.SnowMelt     #dry snow content
     self.FreeWater=self.FreeWater-Refreezing               #free water content in snow
@@ -803,9 +803,9 @@ class WflowModel(DynamicModel):
     NetInSoil=InSoil
 
     self.SoilMoisture=self.SoilMoisture+NetInSoil
-    DirectRunoff=max(self.SoilMoisture-self.FieldCapacity,0.0)    	#if soil is filled to capacity: abundant water runs of directly
+    DirectRunoff=max(self.SoilMoisture-self.FieldCapacity,0.0)  #if soil is filled to capacity: abundant water runs of directly
     self.SoilMoisture=self.SoilMoisture-DirectRunoff
-    NetInSoil=NetInSoil-DirectRunoff                  		#net water which infiltrates into soil
+    NetInSoil=NetInSoil-DirectRunoff  #net water which infiltrates into soil
 
     MaxSnowPack = 10000.0
     if self.MassWasting:
@@ -820,7 +820,7 @@ class WflowModel(DynamicModel):
         MaxFlux= self.ZeroMap
 
 
-    #IntEvap=min(self.InterceptionStorage,self.PotEvaporation) 	 #: Evaporation from interception storage
+    #IntEvap=min(self.InterceptionStorage,self.PotEvaporation)  #: Evaporation from interception storage
     #self.InterceptionStorage=self.InterceptionStorage-IntEvap
 
     # I nthe origal HBV code
@@ -833,18 +833,18 @@ class WflowModel(DynamicModel):
 
 
     self.ActEvap=self.IntEvap+self.SoilEvap           #: Sum of evaporation components (IntEvap+SoilEvap)
-    self.HBVSeepage=((min(self.SoilMoisture/self.FieldCapacity,1))**self.BetaSeepage)*NetInSoil		#runoff water from soil
+    self.HBVSeepage=((min(self.SoilMoisture/self.FieldCapacity,1))**self.BetaSeepage)*NetInSoil  #runoff water from soil
     self.SoilMoisture=self.SoilMoisture-self.HBVSeepage
 
-    Backtosoil=min(self.FieldCapacity-self.SoilMoisture,DirectRunoff) 		#correction for extremely wet periods: soil is filled to capacity
+    Backtosoil=min(self.FieldCapacity-self.SoilMoisture,DirectRunoff)  #correction for extremely wet periods: soil is filled to capacity
     self.DirectRunoff=DirectRunoff-Backtosoil
     self.SoilMoisture=self.SoilMoisture+Backtosoil
-    self.InUpperZone=self.DirectRunoff+self.HBVSeepage                         		# total water available for runoff
+    self.InUpperZone=self.DirectRunoff+self.HBVSeepage  # total water available for runoff
 
     # Steps is always 1 at the moment
     # calculations for Upper zone
-    self.UpperZoneStorage=self.UpperZoneStorage+self.InUpperZone                 		#incoming water from soil
-    self.Percolation=min(self.PERC,self.UpperZoneStorage-self.InUpperZone/2)                        		#Percolation
+    self.UpperZoneStorage=self.UpperZoneStorage+self.InUpperZone  #incoming water from soil
+    self.Percolation=min(self.PERC,self.UpperZoneStorage-self.InUpperZone/2)  #Percolation
     self.UpperZoneStorage=self.UpperZoneStorage-self.Percolation
     self.CapFlux=self.Cflux*(((self.FieldCapacity-self.SoilMoisture)/self.FieldCapacity))   #: Capillary flux flowing back to soil
     self.CapFlux=min(self.UpperZoneStorage,self.CapFlux)
@@ -854,14 +854,14 @@ class WflowModel(DynamicModel):
 
     if not self.SetKquickFlow:
         self.QuickFlow=min(ifthenelse(self.Percolation<self.PERC,0,self.KQuickFlow*((self.UpperZoneStorage-min(self.InUpperZone/2,self.UpperZoneStorage))**(1.0+self.AlphaNL))),self.UpperZoneStorage)
-    	self.UpperZoneStorage=max(ifthenelse(self.Percolation<self.PERC,self.UpperZoneStorage,self.UpperZoneStorage-self.QuickFlow),0)
+        self.UpperZoneStorage=max(ifthenelse(self.Percolation<self.PERC,self.UpperZoneStorage,self.UpperZoneStorage-self.QuickFlow),0)
         #QuickFlow_temp = max(0,self.KQuickFlow*(self.UpperZoneStorage**(1.0+self.AlphaNL)))
         #self.QuickFlow = min(QuickFlow_temp,self.UpperZoneStorage)
         self.RealQuickFlow = self.ZeroMap
     else:
         self.QuickFlow = self.KQuickFlow*self.UpperZoneStorage
         self.RealQuickFlow = max(0,self.K0*(self.UpperZoneStorage - self.SUZ))
-	self.UpperZoneStorage=self.UpperZoneStorage-self.QuickFlow-self.RealQuickFlow
+    self.UpperZoneStorage=self.UpperZoneStorage-self.QuickFlow-self.RealQuickFlow
     """Quickflow volume in mm/timestep"""
     #self.UpperZoneStorage=self.UpperZoneStorage-self.QuickFlow-self.RealQuickFlow
 
@@ -875,9 +875,9 @@ class WflowModel(DynamicModel):
     else:
         DirectRunoffStorage=self.QuickFlow+self.BaseFlow+self.RealQuickFlow
 
-	self.InSoil = InSoil
-	self.RainAndSnowmelt = RainAndSnowmelt
-	self.NetInSoil = NetInSoil
+    self.InSoil = InSoil
+    self.RainAndSnowmelt = RainAndSnowmelt
+    self.NetInSoil = NetInSoil
     self.InwaterMM=max(0.0,DirectRunoffStorage)
     self.Inwater=self.InwaterMM * self.ToCubic
 
