@@ -221,16 +221,14 @@ def main(logfilename,destination,inputfile,projection,cellsize,locationid,snap=F
     ElementTree.SubElement(root, 'yCellSize').text = str(cellsize)
     xml_file = os.path.abspath(os.path.join(destination, 'grid.xml'))
     logger.info('Writing Delft-FEWS grid definition to {:s}'.format(xml_file))
-    gridxml = open(xml_file, 'w+')
-    gridxml.write(ElementTree.tostring(root))
-    gridxml.close()
+    with open(xml_file, 'w+') as f:
+        f.write(ElementTree.tostring(root, encoding='unicode'))
 
     # create shape file
     Driver = ogr.GetDriverByName("ESRI Shapefile")
     shp_file = os.path.abspath(os.path.join(destination, 'mask.shp'))
     logger.info('Writing shape of clone to {:s}'.format(shp_file))
-    # for encode see https://gis.stackexchange.com/a/53939
-    shp_att = os.path.splitext(os.path.basename(shp_file))[0].encode('utf-8')
+    shp_att = os.path.splitext(os.path.basename(shp_file))[0]
     shp = Driver.CreateDataSource(shp_file)
     lyr = shp.CreateLayer(shp_att, srs, geom_type=ogr.wkbPolygon)
     fieldDef = ogr.FieldDefn('ID', ogr.OFTString)

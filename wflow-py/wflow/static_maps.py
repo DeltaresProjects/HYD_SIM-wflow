@@ -212,7 +212,11 @@ def main(source, destination, inifile, dem_in, rivshp, catchshp, gaugeshp=None,
                                     'riverorder_min', 3,
                                     datatype='int')
     try:
-        percentiles = np.array(config.get('parameters', 'statisticmaps', '0, 100').replace(' ', '').split(','), dtype='float')
+        percentiles_str = wt.configget(config, 'parameters',
+            'statisticmaps', '0, 100',
+            datatype='str')
+        percentiles_split = percentiles_str.replace(' ', '').split(',')
+        percentiles = np.array(percentiles_split, dtype='float')
     except configparser.NoOptionError:
         percentiles = [0.0, 100.0]
     # read the parameters for generating a temporary very high resolution grid
