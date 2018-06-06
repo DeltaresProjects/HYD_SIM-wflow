@@ -383,10 +383,9 @@ class Bmi(object, metaclass=ABCMeta):
         ???
         """
         raise NotImplementedError
-    
-    
+
+
 class EBmi(Bmi):
-    
     @abstractmethod
     def initialize_config(self, config_file):
         """
@@ -394,7 +393,7 @@ class EBmi(Bmi):
         This allows a user to then change settings and parameters before fully initializing the model
         """
         raise NotImplementedError
-    
+
     @abstractmethod
     def initialize_model(self, source_directory):
         """
@@ -402,7 +401,7 @@ class EBmi(Bmi):
         reading/setting values.
         """
         raise NotImplementedError
-    
+
     @abstractmethod
     def set_start_time(self, start_time):
         """
@@ -410,7 +409,7 @@ class EBmi(Bmi):
         and before initialize_model. Expects a value in the time units of the model
         """
         raise NotImplementedError
-    
+
     @abstractmethod
     def set_end_time(self, end_time):
         """
@@ -418,7 +417,7 @@ class EBmi(Bmi):
         and before initialize_model. Expects a value in the time units of the model.
         """
         raise NotImplementedError
-    
+
     @abstractmethod
     def get_attribute_names(self):
         """
@@ -426,7 +425,7 @@ class EBmi(Bmi):
         the meta-data of a model, for instance author, version, model specific settings, etc.
         """
         raise NotImplementedError
-    
+
     @abstractmethod
     def get_attribute_value(self, attribute_name):
         """
@@ -434,7 +433,7 @@ class EBmi(Bmi):
         the meta-data of a model, for instance author, version, model specific settings, etc.
         """
         raise NotImplementedError
-    
+
     @abstractmethod
     def set_attribute_value(self, attribute_name, attribute_value):
         """
@@ -442,7 +441,7 @@ class EBmi(Bmi):
         Attributes can be considered the meta-data of a model, for instance author, version, model specific settings, etc.
         """
         raise NotImplementedError
-    
+
     @abstractmethod
     def save_state(self, destination_directory):
         """
@@ -453,7 +452,7 @@ class EBmi(Bmi):
         File destination_directory: the directory in which the state files should be written.
         """
         raise NotImplementedError
-    
+
     @abstractmethod
     def load_state(self, source_directory):
         """
